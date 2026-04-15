@@ -1007,18 +1007,6 @@ export const VercelAnalyticsOptions = object({
    */
   disableAutoTrack: optional(boolean()),
   /**
-   * The mode to use for the analytics script.
-   * - `auto` - Automatically detect the environment (default)
-   * - `production` - Always use production script
-   * - `development` - Always use development script (logs to console)
-   */
-  mode: optional(union([literal('auto'), literal('development'), literal('production')])),
-  /**
-   * Whether to enable debug logging.
-   * Automatically enabled in development/test environments.
-   */
-  debug: optional(boolean()),
-  /**
    * Custom endpoint for data collection.
    * Useful for self-hosted or proxied setups.
    */

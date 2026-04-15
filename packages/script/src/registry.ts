@@ -306,7 +306,7 @@ export async function registry(resolve?: (path: string) => Promise<string>): Pro
       category: 'analytics',
       bundle: true,
       proxy: {
-        domains: ['va.vercel-scripts.com', 'vitals.vercel-insights.com'],
+        domains: ['va.vercel-scripts.com'],
         privacy: PRIVACY_IP_ONLY,
       },
     }),

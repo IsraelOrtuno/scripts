@@ -871,11 +871,11 @@ describe('first-party privacy stripping', () => {
       await page.waitForSelector('#status', { timeout: 5000 }).catch(() => {})
       await page.waitForTimeout(2000)
 
+      // Vercel Analytics is skipped in dev — collection only works on Vercel-hosted deployments
       const hasQueue = await page.evaluate(() => typeof window.va === 'function')
-      expect(hasQueue).toBe(true)
+      expect(hasQueue).toBe(false)
 
       await page.close()
-      // No proxy captures expected — Vercel sends to relative /_vercel/insights/* paths
     }, 30000)
 
     it('posthog', async () => {

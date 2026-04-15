@@ -44,8 +44,6 @@ function sendPageview() {
 function dumpQueue() {
   // eslint-disable-next-line no-console
   console.log('window.vaq:', JSON.stringify(window.vaq, null, 2))
-  // eslint-disable-next-line no-console
-  console.log('window.vam:', window.vam)
 }
 </script>
 
@@ -53,7 +51,6 @@ function dumpQueue() {
   <div class="flex flex-col gap-4 p-4">
     <ClientOnly>
       <div>status: {{ status }}</div>
-      <div>mode (window.vam): {{ typeof window !== 'undefined' ? window.vam ?? 'n/a' : 'n/a' }}</div>
       <div v-if="eventTracked">
         Event tracked!
       </div>

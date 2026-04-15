@@ -28,7 +28,7 @@ useScriptVercelAnalytics({
 
 ### First-Party Mode
 
-First-party mode is auto-enabled for Vercel Analytics. Nuxt bundles the analytics script locally and proxies data collection requests through your server. This prevents ad blockers from blocking analytics and removes sensitive data from third-party requests.
+First-party mode is auto-enabled for Vercel Analytics. Nuxt bundles the analytics script locally so ad blockers don't break it. The script collects via a relative `/_vercel/insights/*` path served by Vercel's edge, which is only reachable on Vercel-hosted deployments.
 
 ```ts
 export default defineNuxtConfig({
@@ -39,6 +39,10 @@ export default defineNuxtConfig({
   }
 })
 ```
+
+::callout{type="info"}
+In `nuxt dev`, the analytics script is skipped to avoid POSTing to an unreachable endpoint. `track` and `pageview` calls become no-ops. Deploy to preview or production to verify events.
+::
 
 ## Defaults
 

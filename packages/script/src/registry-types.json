@@ -943,17 +943,12 @@
       {
         "name": "VercelAnalyticsOptions",
         "kind": "const",
-        "code": "export const VercelAnalyticsOptions = object({\n  /**\n   * The DSN of the project to send events to.\n   * Only required when self-hosting or deploying outside of Vercel.\n   */\n  dsn: optional(string()),\n  /**\n   * Whether to disable automatic page view tracking on route changes.\n   * Set to true if you want to manually call pageview().\n   */\n  disableAutoTrack: optional(boolean()),\n  /**\n   * The mode to use for the analytics script.\n   * - `auto` - Automatically detect the environment (default)\n   * - `production` - Always use production script\n   * - `development` - Always use development script (logs to console)\n   */\n  mode: optional(union([literal('auto'), literal('development'), literal('production')])),\n  /**\n   * Whether to enable debug logging.\n   * Automatically enabled in development/test environments.\n   */\n  debug: optional(boolean()),\n  /**\n   * Custom endpoint for data collection.\n   * Useful for self-hosted or proxied setups.\n   */\n  endpoint: optional(string()),\n})"
+        "code": "export const VercelAnalyticsOptions = object({\n  /**\n   * The DSN of the project to send events to.\n   * Only required when self-hosting or deploying outside of Vercel.\n   */\n  dsn: optional(string()),\n  /**\n   * Whether to disable automatic page view tracking on route changes.\n   * Set to true if you want to manually call pageview().\n   */\n  disableAutoTrack: optional(boolean()),\n  /**\n   * Custom endpoint for data collection.\n   * Useful for self-hosted or proxied setups.\n   */\n  endpoint: optional(string()),\n})"
       },
       {
         "name": "AllowedPropertyValues",
         "kind": "type",
         "code": "export type AllowedPropertyValues = string | number | boolean | null"
-      },
-      {
-        "name": "VercelAnalyticsMode",
-        "kind": "type",
-        "code": "export type VercelAnalyticsMode = 'auto' | 'development' | 'production'"
       },
       {
         "name": "BeforeSendEvent",
@@ -2213,18 +2208,6 @@
         "type": "boolean",
         "required": false,
         "description": "Whether to disable automatic page view tracking on route changes. Set to true if you want to manually call pageview()."
-      },
-      {
-        "name": "mode",
-        "type": "'auto' | 'development' | 'production'",
-        "required": false,
-        "description": "The mode to use for the analytics script. - `auto` - Automatically detect the environment (default) - `production` - Always use production script - `development` - Always use development script (logs to console)"
-      },
-      {
-        "name": "debug",
-        "type": "boolean",
-        "required": false,
-        "description": "Whether to enable debug logging. Automatically enabled in development/test environments."
       },
       {
         "name": "endpoint",

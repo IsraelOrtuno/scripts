@@ -6,8 +6,6 @@ export { VercelAnalyticsOptions }
 
 export type AllowedPropertyValues = string | number | boolean | null
 
-export type VercelAnalyticsMode = 'auto' | 'development' | 'production'
-
 export interface BeforeSendEvent {
   type: 'pageview' | 'event'
   url: string
@@ -29,7 +27,6 @@ declare global {
   interface Window {
     va?: (event: string, properties?: unknown) => void
     vaq?: [string, unknown?][]
-    vam?: VercelAnalyticsMode
   }
 }
 
@@ -61,13 +58,8 @@ function parseProperties(
 export function useScriptVercelAnalytics<T extends VercelAnalyticsApi>(_options?: VercelAnalyticsInput) {
   const beforeSend = _options?.beforeSend
   return useRegistryScript<T, typeof VercelAnalyticsOptions>('vercelAnalytics', (options) => {
-    // import.meta.dev is evaluated at build time, so it determines which script file
-    // is bundled (script.debug.js vs script.js). The runtime `mode` option (window.vam)
-    // controls runtime behavior but does not change which script is loaded.
-    const scriptInput: { 'src': string, 'defer': boolean, 'data-sdkn': string, 'data-dsn'?: string, 'data-disable-auto-track'?: string, 'data-debug'?: string, 'data-endpoint'?: string } = {
-      'src': import.meta.dev
-        ? 'https://va.vercel-scripts.com/v1/script.debug.js'
-        : 'https://va.vercel-scripts.com/v1/script.js',
+    const scriptInput: { 'src': string, 'defer': boolean, 'data-sdkn': string, 'data-dsn'?: string, 'data-disable-auto-track'?: string, 'data-endpoint'?: string } = {
+      'src': 'https://va.vercel-scripts.com/v1/script.js',
       'defer': true,
       'data-sdkn': '@nuxt/scripts',
     }
@@ -78,16 +70,17 @@ export function useScriptVercelAnalytics<T extends VercelAnalyticsApi>(_options?
       scriptInput['data-disable-auto-track'] = '1'
     if (options?.endpoint)
       scriptInput['data-endpoint'] = options.endpoint
-    // Only set data-debug="false" in dev mode to explicitly disable debug logging
-    if (import.meta.dev && options?.debug === false)
-      scriptInput['data-debug'] = 'false'
 
     return {
       scriptInput,
       schema: import.meta.dev ? VercelAnalyticsOptions : undefined,
       scriptOptions: {
-        // Load on client hydration for accurate web vitals
-        trigger: 'client',
+        // Vercel Analytics collects via a relative `/_vercel/insights/*` endpoint
+        // served by Vercel's edge. Outside Vercel (including `nuxt dev`) there is
+        // no upstream to forward to, so loading would POST to the local origin
+        // and fail. Default to manual in dev so the script only loads if the
+        // user explicitly triggers it.
+        trigger: import.meta.dev ? 'manual' : 'client',
         use: () => ({
           va: (...args: [string, unknown?]) => window.va?.(...args),
           track(name: string, properties?: Record<string, AllowedPropertyValues>) {
@@ -114,18 +107,9 @@ export function useScriptVercelAnalytics<T extends VercelAnalyticsApi>(_options?
         : () => {
             if (window.va)
               return
-            // Set up the queue exactly as @vercel/analytics does
             window.va = function (...params: [string, unknown?]) {
               ;(window.vaq = window.vaq || []).push(params)
             }
-            // Set mode — auto detects via build environment, explicit sets directly
-            if (options?.mode === 'auto' || !options?.mode) {
-              window.vam = import.meta.dev ? 'development' : 'production'
-            }
-            else {
-              window.vam = options.mode
-            }
-            // Register beforeSend middleware
             if (beforeSend) {
               window.va('beforeSend', beforeSend)
             }

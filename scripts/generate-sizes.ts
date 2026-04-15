@@ -792,8 +792,7 @@ const CLIENT_INIT: Record<string, string> = {
   youtubePlayer: `
     window.onYouTubeIframeAPIReady = function() {};`,
   vercelAnalytics: `
-    window.va = function() { (window.vaq = window.vaq || []).push(arguments) };
-    window.vam = 'production';`,
+    window.va = function() { (window.vaq = window.vaq || []).push(arguments) };`,
   bingUet: `
     window.uetq = window.uetq || [];
     window.addEventListener('load', function() {

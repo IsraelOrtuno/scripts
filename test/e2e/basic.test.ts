@@ -441,10 +441,6 @@ describe('third-party-capital', () => {
     })
     expect(hasQueue).toBe(true)
 
-    // Verify window.vam is set (mode auto detects build environment)
-    const mode = await page.evaluate(() => window.vam)
-    expect(mode).toBe('production')
-
     // Verify the script tag has correct attributes
     const scriptAttrs = await page.evaluate(() => {
       const script = document.querySelector('script[data-sdkn="@nuxt/scripts"]')
